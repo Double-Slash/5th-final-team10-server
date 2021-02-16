@@ -29,17 +29,6 @@ public class SurveyController {
     private final PointService pointService;
     private final QuestionAnswerService answerService;
 
-//    @PostMapping("/videoTest")
-//    public boolean createVideo(@RequestPart(value = "video", required = false) MultipartFile file) throws IOException {
-//        String baseDir = "C:\\Users\\82103\\Desktop\\etc";
-//
-//        String filepath = baseDir + "\\" +  file.getOriginalFilename(); //files[i].getOriginalFilename();
-//        System.out.println(filepath);
-//        file.transferTo(new File(filepath));
-//            //surveyRepository.save(survey);
-//        return true;
-//    }
-
     @PostMapping("/survey") // 설문조사 등록
     public SuccessDto createSurvey(@RequestPart(value = "file", required = false) MultipartFile[] files,
                                              @RequestPart(value = "requestDto") SurveyRequestDto requestDto,
@@ -113,7 +102,7 @@ public class SurveyController {
         if (member != null) {
             map.put("success", true);
             pointService.usePoint(member, surveyId);
-            map.put("questions", surveyService.getQuestionTexts(surveyId)); // 질문 리스트
+            map.put("survey", surveyService.getSurvey(surveyId)); //
             map.put("summary", answerService.getAnswers(surveyId)); // 요약 보기
             map.put("ones", answerService.getOnes(surveyId));
         }
@@ -181,7 +170,7 @@ public class SurveyController {
         return map;
     }
 
-    @GetMapping("/myPage")
+    @GetMapping("/my-page")
     public Map<String, Object> myPage(@AuthenticationPrincipal Member member){
         Map<String, Object> map = new HashMap<>();
         if(member != null){
